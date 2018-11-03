@@ -47,11 +47,11 @@ extension SideMenuController {
         centerPanel.addGestureRecognizer(tapRecognizer)
     }
     
-    @inline(__always) func handleCenterPanelPanLeft(_ gesture: UIScreenEdgePanGestureRecognizer) {
+    @objc @inline(__always) func handleCenterPanelPanLeft(_ gesture: UIScreenEdgePanGestureRecognizer) {
         handleCenterPanelPan(gesture)
     }
     
-    @inline(__always) func handleCenterPanelPanRight(_ gesture: UIScreenEdgePanGestureRecognizer) {
+    @objc @inline(__always) func handleCenterPanelPanRight(_ gesture: UIScreenEdgePanGestureRecognizer) {
         handleCenterPanelPan(gesture)
     }
     
@@ -75,7 +75,7 @@ extension SideMenuController {
         if !hidden {
             if sidePanelPosition.isPositionedLeft {
                 centerPanelFrame.origin.x = sidePanel.frame.maxX
-            }else{
+            } else {
                 centerPanelFrame.origin.x = sidePanel.frame.minX - centerPanel.frame.width
             }
         } else {
@@ -91,19 +91,19 @@ extension SideMenuController {
         }
         
         let updated = centerPanel.frame != centerPanelFrame
-        
-        UIView.panelAnimation( duration, animations: { _ in
+
+        UIView.panelAnimation(duration, animations: {
             self.centerPanel.frame = centerPanelFrame
             self.set(statusUnderlayAlpha: hidden ? 0 : 1)
-        }) { _ in
+        }, completion: {
             if hidden {
                 self.setSideShadow(hidden: hidden)
             }
             completion?(updated)
-        }
+        })
     }
     
-    func handleCenterPanelPan(_ recognizer: UIPanGestureRecognizer){
+    @objc func handleCenterPanelPan(_ recognizer: UIPanGestureRecognizer){
         
         guard canDisplaySideController else {
             return
@@ -140,7 +140,7 @@ extension SideMenuController {
             
             if sidePanelPosition.isPositionedLeft {
                 alpha = xPoint / sidePanelFrame.width
-            }else{
+            } else {
                 alpha = 1 - (xPoint - sidePanelFrame.minX) / sidePanelFrame.width
             }
             
@@ -164,15 +164,15 @@ extension SideMenuController {
                     if leftToRight {
                         // opening
                         reveal = centerFrame.minX > sideFrame.width * shouldOpenPercentage
-                    } else{
+                    } else {
                         // closing
                         reveal = centerFrame.minX > sideFrame.width * shouldHidePercentage
                     }
-                }else{
+                } else {
                     if leftToRight {
                         //closing
                         reveal = centerFrame.maxX < sideFrame.minX + shouldOpenPercentage * sideFrame.width
-                    }else{
+                    } else {
                         // opening
                         reveal = centerFrame.maxX < sideFrame.minX + shouldHidePercentage * sideFrame.width
                     }
