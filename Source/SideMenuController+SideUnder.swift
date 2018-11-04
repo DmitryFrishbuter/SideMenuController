@@ -31,30 +31,31 @@ extension SideMenuController {
         let panLeft = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleCenterPanelPanLeft))
         panLeft.edges = .left
         panLeft.delegate = self
-        
+
         let panRight = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleCenterPanelPanRight))
         panRight.edges = .right
         panRight.delegate = self
-        
+
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tapRecognizer.delegate = self
         
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleCenterPanelPan))
-        panGesture.delegate = self
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleCenterPanelPan))
+        panRecognizer.delegate = self
         
         centerPanel.addGestureRecognizer(panLeft)
         centerPanel.addGestureRecognizer(panRight)
+        centerPanel.addGestureRecognizer(panRecognizer)
         centerPanel.addGestureRecognizer(tapRecognizer)
     }
     
     @objc @inline(__always) func handleCenterPanelPanLeft(_ gesture: UIScreenEdgePanGestureRecognizer) {
         handleCenterPanelPan(gesture)
     }
-    
+
     @objc @inline(__always) func handleCenterPanelPanRight(_ gesture: UIScreenEdgePanGestureRecognizer) {
         handleCenterPanelPan(gesture)
     }
-    
+
     func setSideShadow(hidden: Bool) {
         
         guard _preferences.drawing.centerPanelShadow else {

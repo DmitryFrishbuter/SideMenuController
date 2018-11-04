@@ -381,6 +381,12 @@ open class SideMenuController: UIViewController, UIGestureRecognizerDelegate {
             } else {
                 return false
             }
+        case is UIPanGestureRecognizer:
+            if _preferences.interaction.panningEnabled {
+                return sidePanelVisible
+            } else {
+                return false
+            }
         case is UITapGestureRecognizer:
             return sidePanelVisible
         case is UISwipeGestureRecognizer:
